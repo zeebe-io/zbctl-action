@@ -33,10 +33,7 @@ try {
     await exec.exec(`ls ${path.dirname(binPath)}`);
     console.log(`Making zbctl (${binPath}) available`);
     core.addPath(path.dirname(binPath));
-    const output = await exec.getExecOutput(`zbctl ${command}`);
-    if (output.exitCode != 0) {
-        core.setFailed(`zbctl failed with exit code ${output.exitCode}: ${output.stderr}`);
-    }
+    const output = await exec.getExecOutput(`bash -c "zbctl ${command}"`);
     core.setOutput("result", output.stdout);
 } catch (error) {
     core.setFailed(error.message);
