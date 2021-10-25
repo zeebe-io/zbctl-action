@@ -27,7 +27,7 @@ with:
   command: 'deploy *.bpmn'
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  ZEEBE_ADDRESS: ${{ secrets.GITHUB_TOKEN }}
+  ZEEBE_ADDRESS: ${{ secrets.ZEEBE_ADDRESS }}
   ZEEBE_CLIENT_ID: ${{ secrets.ZEEBE_CLIENT_ID }}
   ZEEBE_CLIENT_SECRET: ${{ secrets.ZEEBE_CLIENT_SECRET }}
   ZEEBE_AUTHORIZATION_SERVER_URL: ${{ secrets.ZEEBE_AUTHORIZATION_SERVER_URL }}
