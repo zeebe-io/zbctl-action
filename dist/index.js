@@ -26,18 +26,20 @@ try {
 
     const token = process.env['GITHUB_TOKEN']
     const octo = _actions_github__WEBPACK_IMPORTED_MODULE_2__.getOctokit(token);
-    
+
     const release = await octo.rest.repos.getReleaseByTag({
         owner: 'camunda-cloud',
         repo: 'zeebe',
         tag: version,
     });
+    console.log(`Using release ${release}`);
     const asset = release.data.assets.find(asset => asset.name == "zbctl");
     const binPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_1__.downloadTool(asset.browser_download_url);
+    console.log(`Making zbctl (${binPath}) available`);
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(binPath);
     const output = await _actions_exec__WEBPACK_IMPORTED_MODULE_3__.getExecOutput(`zbctl ${command}`);
     if (output.exitCode != 0) {
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`zbctl failed with exit code ${output.exitCode}: ${output.stderr}`)
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`zbctl failed with exit code ${output.exitCode}: ${output.stderr}`);
     }
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("result", output.stdout);
 } catch (error) {
