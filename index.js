@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as gh from '@actions/github';
 import * as exec from '@actions/exec';
+import * as path from 'path';
 
 try {
     const version = core.getInput('version');
@@ -15,11 +16,19 @@ try {
         repo: 'zeebe',
         tag: version,
     });
+
     console.log(`Using release ${release}`);
-    const asset = release.data.assets.find(asset => asset.name == "zbctl");
-    const binPath = await tc.downloadTool(asset.browser_download_url);
+    var asset;
+    if (process.platform == 'darwin'){
+        asset = release.data.assets.find(asset => asset.name == "zbctl.darwin");
+    } else if (process.platform == 'win32') {
+        asset = release.data.assets.find(asset => asset.name == "zbctl.exe");
+    } else {
+        asset = release.data.assets.find(asset => asset.name == "zbctl");
+    }
+    const binPath = await tc.downloadTool(asset.browser_download_url, `${process.env['RUNNER_TEMP']}/zbctl-bin/zbctl`);
     console.log(`Making zbctl (${binPath}) available`);
-    core.addPath(binPath);
+    core.addPath(path.dirname(binPath));
     const output = await exec.getExecOutput(`zbctl ${command}`);
     if (output.exitCode != 0) {
         core.setFailed(`zbctl failed with exit code ${output.exitCode}: ${output.stderr}`);

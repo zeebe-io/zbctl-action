@@ -15,6 +15,9 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _actions_exec__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(1514);
 /* harmony import */ var _actions_exec__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(_actions_exec__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(5622);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(path__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -32,11 +35,19 @@ try {
         repo: 'zeebe',
         tag: version,
     });
+
     console.log(`Using release ${release}`);
-    const asset = release.data.assets.find(asset => asset.name == "zbctl");
-    const binPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_1__.downloadTool(asset.browser_download_url);
+    var asset;
+    if (process.platform == 'darwin'){
+        asset = release.data.assets.find(asset => asset.name == "zbctl.darwin");
+    } else if (process.platform == 'win32') {
+        asset = release.data.assets.find(asset => asset.name == "zbctl.exe");
+    } else {
+        asset = release.data.assets.find(asset => asset.name == "zbctl");
+    }
+    const binPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_1__.downloadTool(asset.browser_download_url, `${process.env['RUNNER_TEMP']}/zbctl-bin/zbctl`);
     console.log(`Making zbctl (${binPath}) available`);
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(binPath);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(path__WEBPACK_IMPORTED_MODULE_4__.dirname(binPath));
     const output = await _actions_exec__WEBPACK_IMPORTED_MODULE_3__.getExecOutput(`zbctl ${command}`);
     if (output.exitCode != 0) {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`zbctl failed with exit code ${output.exitCode}: ${output.stderr}`);
