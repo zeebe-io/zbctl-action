@@ -19,7 +19,7 @@ try {
 
     console.log(`Using release ${release}`);
     var asset;
-    if (process.platform == 'darwin'){
+    if (process.platform == 'darwin') {
         asset = release.data.assets.find(asset => asset.name == "zbctl.darwin");
     } else if (process.platform == 'win32') {
         asset = release.data.assets.find(asset => asset.name == "zbctl.exe");
@@ -27,6 +27,9 @@ try {
         asset = release.data.assets.find(asset => asset.name == "zbctl");
     }
     const binPath = await tc.downloadTool(asset.browser_download_url, `${process.env['RUNNER_TEMP']}/zbctl-bin/zbctl`);
+    if (process.platform == "linux" || process.platform == "darwin") {
+        exec.exec(`chmod +x ${binPath}`);
+    }
     console.log(`Making zbctl (${binPath}) available`);
     core.addPath(path.dirname(binPath));
     const output = await exec.getExecOutput(`zbctl ${command}`);
