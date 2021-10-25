@@ -2,10 +2,10 @@ name: 'zbctl'
 description: 'Run zbctl commands in your actions'
 inputs:
   version:
-    description: 'Which version of zbctl should be used. Defaults to latest.'
-    default: 'latest'
+    description: 'Which version of zbctl should be used.'
+    required: true
   command:
-    description: 'zbctl command to run, for example deploy.'
+    description: 'zbctl command to run, for example "deploy process.bpmn".'
     required: true
 outputs:
   result:
