@@ -1,0 +1,15 @@
+name: 'zbctl'
+description: 'Run zbctl commands in your actions'
+inputs:
+  version:
+    description: 'Which version of zbctl should be used. Defaults to latest.'
+    default: 'latest'
+  command:
+    description: 'zbctl command to run, for example deploy.'
+    required: true
+outputs:
+  result:
+    description: 'JSON output of zbctl'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
