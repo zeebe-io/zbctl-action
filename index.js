@@ -26,12 +26,14 @@ try {
     } else {
         asset = release.data.assets.find(asset => asset.name == "zbctl");
     }
-    const binPath = await tc.downloadTool(asset.browser_download_url, `${process.env['RUNNER_TEMP']}/zbctl-bin/zbctl`);
-    if (process.platform == "linux" || process.platform == "darwin") {
-        exec.exec(`chmod +x ${binPath}`);
+    const binPath = await tc.downloadTool(asset.browser_download_url, `${process.env['RUNNER_TEMP']}/zbctl-bin`);
+    if (process.platform == "linux") {
+        exec.exec(`chmod +x ${binPath}/zbctl`);
+    } else if (process.platform == "darwin"){
+        exec.exec(`chmod +x ${binPath}/zbctl.darwin`);
     }
     console.log(`Making zbctl (${binPath}) available`);
-    core.addPath(path.dirname(binPath));
+    core.addPath(binPath);
     const output = await exec.getExecOutput(`zbctl ${command}`);
     if (output.exitCode != 0) {
         core.setFailed(`zbctl failed with exit code ${output.exitCode}: ${output.stderr}`);

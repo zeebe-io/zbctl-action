@@ -45,12 +45,14 @@ try {
     } else {
         asset = release.data.assets.find(asset => asset.name == "zbctl");
     }
-    const binPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_1__.downloadTool(asset.browser_download_url, `${process.env['RUNNER_TEMP']}/zbctl-bin/zbctl`);
-    if (process.platform == "linux" || process.platform == "darwin") {
-        _actions_exec__WEBPACK_IMPORTED_MODULE_3__.exec(`chmod +x ${binPath}`);
+    const binPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_1__.downloadTool(asset.browser_download_url, `${process.env['RUNNER_TEMP']}/zbctl-bin`);
+    if (process.platform == "linux") {
+        _actions_exec__WEBPACK_IMPORTED_MODULE_3__.exec(`chmod +x ${binPath}/zbctl`);
+    } else if (process.platform == "darwin"){
+        _actions_exec__WEBPACK_IMPORTED_MODULE_3__.exec(`chmod +x ${binPath}/zbctl.darwin`);
     }
     console.log(`Making zbctl (${binPath}) available`);
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(path__WEBPACK_IMPORTED_MODULE_4__.dirname(binPath));
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(binPath);
     const output = await _actions_exec__WEBPACK_IMPORTED_MODULE_3__.getExecOutput(`zbctl ${command}`);
     if (output.exitCode != 0) {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`zbctl failed with exit code ${output.exitCode}: ${output.stderr}`);
