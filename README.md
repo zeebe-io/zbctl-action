@@ -21,7 +21,7 @@ The stdout of zbctl. This should be in JSON format which you can parse to extrac
 ## Example usage
 
 ```
-uses: oleschoenburg/zbctl-action@v0.0.7
+uses: zeebe-io/zbctl-action@v0.0.7
 with:
   version: '1.2.2'
   command: 'deploy *.bpmn'
