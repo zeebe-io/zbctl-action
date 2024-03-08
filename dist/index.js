@@ -52,7 +52,7 @@ try {
     await _actions_exec__WEBPACK_IMPORTED_MODULE_3__.exec(`ls ${path__WEBPACK_IMPORTED_MODULE_4__.dirname(binPath)}`);
     console.log(`Making zbctl (${binPath}) available`);
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(path__WEBPACK_IMPORTED_MODULE_4__.dirname(binPath));
-    const output = await _actions_exec__WEBPACK_IMPORTED_MODULE_3__.getExecOutput(`bash -c "zbctl ${command}"`);
+    const output = await _actions_exec__WEBPACK_IMPORTED_MODULE_3__.getExecOutput(`bash -c "shopt -s globstar && zbctl ${command}"`);
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("result", output.stdout);
 } catch (error) {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
