@@ -33,7 +33,7 @@ try {
     await exec.exec(`ls ${path.dirname(binPath)}`);
     console.log(`Making zbctl (${binPath}) available`);
     core.addPath(path.dirname(binPath));
-    const output = await exec.getExecOutput(`bash -c "zbctl ${command}"`);
+    const output = await exec.getExecOutput(`bash -c "shopt -s globstar && zbctl ${command}"`);
     core.setOutput("result", output.stdout);
 } catch (error) {
     core.setFailed(error.message);
